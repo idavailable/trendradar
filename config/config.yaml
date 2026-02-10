@@ -155,11 +155,11 @@ rss:
 #    • 适用场景：避免重复信息干扰
 # ===============================================================
 report:
-  mode: "current"                     # 可选: daily | current | incremental
+  mode: "daily"                     # 可选: daily | current | incremental
                                       # ⚠️ 开启调度系统后，此值会被当前时间段的 report_mode 覆盖
 
 
-  display_mode: "keyword"             # 分组维度: keyword | platform
+  display_mode: "platform"             # 分组维度: keyword | platform
                                       # keyword: 按关键词分组显示（默认）
                                       # platform: 按平台/来源分组显示
 
@@ -298,7 +298,7 @@ storage:
   # - auto: 自动选择（GitHub Actions 且配置了远程存储 → remote，否则 → local）
   # - local: 本地 SQLite + TXT/HTML 文件
   # - remote: 远程云存储（S3 兼容协议，支持 R2/OSS/COS 等）
-  backend: "auto"
+  backend: "remote"
 
   # 数据格式选项
   formats:
