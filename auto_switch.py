@@ -53,7 +53,7 @@ def check_model_alive(api_key, model_name):
         return True
 
 def update_yaml_safe(new_model):
-    """精准修改 YAML 第 418 行附近的配置"""
+    """精准修改 YAML 第 340 行附近的配置"""
     if not os.path.exists(YAML_PATH):
         print(f"Error: {YAML_PATH} 不存在")
         return False
@@ -62,8 +62,8 @@ def update_yaml_safe(new_model):
         lines = f.readlines()
     
     updated = False
-    # 在 418 行前后 20 行内搜索关键字，提高容错率
-    search_range = range(max(0, 400), min(len(lines), 440)) 
+    # 在 340 行前后 20 行内搜索关键字，提高容错率
+    search_range = range(max(0, 320), min(len(lines), 360)) 
     for i in search_range:
         if "model:" in lines[i] and "dashscope/" in lines[i]:
             # 正则替换引号内的模型路径
