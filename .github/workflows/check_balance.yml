@@ -1,0 +1,52 @@
+name: Qwen Model Auto-Rotate
+
+on:
+  schedule:
+    # 每八小时运行一次 (UTC时间 0, 8, 16...点)
+    - cron: '0 */8 * * *'
+  workflow_dispatch: # 支持手动点击 Actions 页面上的 Run workflow 进行测试
+
+# 必须赋予写权限，否则无法修改文件并推送
+permissions:
+  contents: write
+
+jobs:
+  rotate-models:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          # 获取完整历史以确保 push 顺畅
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: pip install requests
+
+      - name: Run Auto-Switch Script
+        env:
+          # 必须在仓库 Settings > Secrets 中配置此变量
+          DASHSCOPE_API_KEY: ${{ secrets.DASHSCOPE_API_KEY }}
+        run: python auto_switch.py
+
+      - name: Commit and Push Changes
+        run: |
+          # 配置 Git 机器人信息
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          # 检查是否有文件变动 (models_config.json 或 config/config.yaml)
+          if [[ -n "$(git status --porcelain)" ]]; then
+            git add .
+            git commit -m "chore: auto-remove expired/empty models and update config"
+            # 采用 rebase 模式推送，防止多人同时修改仓库导致冲突
+            git pull --rebase origin master
+            git push origin master
+          else
+            echo "No changes detected, skipping push."
+          fi
