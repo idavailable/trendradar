@@ -1,10 +1,6 @@
 {
     "active_models": [
         {
-            "name": "qwen-flash-character-2026-02-26",
-            "expiry": "2026-05-30"
-        },
-        {
             "name": "gui-plus-2026-02-26",
             "expiry": "2026-06-15"
         },
